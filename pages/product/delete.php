@@ -5,13 +5,13 @@ if (!isset($_GET['id']) || getProductByID($_GET['id']) === null) {
     header('Location: ./?page=product/home');
     exit;
 }
-if (deleteCategory($_GET['id'])) {
+if (deleteProduct($_GET['id'])) {
     echo '<div class="alert alert-success" role="alert">
-        Category deleted successfully.<a href="./?page=product/home">Product page</a>
+        Product deleted successfully.<a href="./?page=product/home">Product page</a>
         </div>';
 } else {
     echo '<div class="alert alert-danger" role="alert">
-        Cannot delete category! <a href="./?page=product/home">Product page</a>
+        Cannot delete Product! <a href="./?page=product/home">Product page</a>
         </div>';
 }
 /*if (!isset($_GET['id']) || getUserByID($_GET['id']) === null) {

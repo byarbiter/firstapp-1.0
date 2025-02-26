@@ -7,7 +7,7 @@ if (!isset($_GET['id']) || getCategoryByID($_GET['id']) === null) {
 }
 if (deleteCategory($_GET['id'])) {
     echo '<div class="alert alert-success" role="alert">
-        Category deleted sucessfully.<a href="./?page=category/home">Category page</a>
+        Category deleted successfully.<a href="./?page=category/home">Category page</a>
         </div>';
 } else {
     echo '<div class="alert alert-danger" role="alert">

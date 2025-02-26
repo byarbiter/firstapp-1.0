@@ -55,8 +55,6 @@ function updateCategory($id, $name, $slug)
     global $db;
 
     $query = $db->query("UPDATE tbl_category SET name = '$name', slug = '$slug'  WHERE id_category = '$id'");
-
-
     if ($db->affected_rows > 0) {
         return true;
     }

@@ -66,12 +66,53 @@ function deleteProduct($id)
     global $db;
     $db->begin_transaction();
     try {
+        // First delete related records in the junction table
+        $db->query("DELETE FROM tbl_product_category WHERE id_product = '$id'");
+
+        // Then delete the product
         $db->query("DELETE FROM tbl_product WHERE id_product = '$id'");
+
         if ($db->affected_rows) {
+            $db->commit();
+            return true;
+        } else {
+            $db->rollback();
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        $db->rollback();
+        return false;
+    }
+}
+function updateProduct($id, $name, $slug, $price, $short_des, $long_des, $id_categories)
+{
+    global $db;
+    $db->begin_transaction();
+    try {
+        $query = $db->query("UPDATE tbl_product SET name = '$name', slug = '$slug', price = '$price', short_des = '$short_des', long_des = '$long_des' WHERE id_product = '$id'");
+        if ($db->affected_rows > 0) {
+            $db->query("DELETE FROM tbl_product_category WHERE id_product = '$id'");
+            foreach ($id_categories as $id_category) {
+                $query1 = $db->prepare("INSERT INTO tbl_product_category (id_category,id_product) VALUE ('$id_category', '$id')");
+                $query1->execute();
+            }
+            $db->commit();
             return true;
         }
         return false;
     } catch (Exception $e) {
+        error_log($e->getMessage());
         $db->rollback();
+        return false;
     }
+}
+function getProductCategories($id_product)
+{
+    global $db;
+    $query = $db->query("SELECT * FROM tbl_product_category WHERE id_product = '$id_product'");
+    if ($query->num_rows) {
+        return $query;
+    }
+    return null;
 }
